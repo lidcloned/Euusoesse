@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -34,7 +33,7 @@ class LAMAFIAApp extends StatelessWidget {
           colorScheme: ColorScheme.dark(
             primary: ThemeConstants.primaryColor,
             secondary: ThemeConstants.accentColor,
-            background: ThemeConstants.backgroundColor,
+            // background: ThemeConstants.backgroundColor, // Deprecated, use surface or scaffoldBackgroundColor
             surface: ThemeConstants.surfaceColor,
             error: ThemeConstants.dangerColor,
           ),
@@ -54,7 +53,7 @@ class LAMAFIAApp extends StatelessWidget {
               fontSize: 20,
             ),
           ),
-          cardTheme: CardThemeData(
+          cardTheme: CardTheme(
             color: ThemeConstants.surfaceColor,
             elevation: 2,
           ),

@@ -9,48 +9,48 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.6
+  cupertino_icons: # Deixar pub resolver a versão mais recente compatível
   # Firebase
-  firebase_core: ^2.24.2
-  firebase_auth: ^4.15.3
-  cloud_firestore: ^4.13.6
-  firebase_storage: ^11.5.6
+  firebase_core: 
+  firebase_auth: 
+  cloud_firestore: 
+  firebase_storage: 
   # Estado e armazenamento
-  provider: ^6.1.1
-  shared_preferences: ^2.2.2
+  provider: 
+  shared_preferences: 
   # Plugins essenciais
-  flutter_plugin_android_lifecycle: ^2.0.19
-  path_provider: ^2.1.4
+  flutter_plugin_android_lifecycle: # Já atualizado parcialmente, deixar pub resolver
+  path_provider: 
   # UI e formatação
-  intl: ^0.19.0
-  flutter_svg: ^2.0.10+1
+  intl: 
+  flutter_svg: 
   # Mídia
-  cached_network_image: ^3.4.0
-  flutter_cache_manager: ^3.4.1
+  cached_network_image: 
+  flutter_cache_manager: 
   # Plugin de áudio para reprodução dos arquivos de áudio
-  audioplayers: ^5.2.1
+  audioplayers: 
   # Mapas
-  flutter_map: ^6.1.0
-  latlong2: ^0.9.0
+  flutter_map: 
+  latlong2: 
   # Notificações
-  flutter_local_notifications: ^17.2.4
+  flutter_local_notifications: 
   # Utilitários
-  uuid: ^4.2.1
-  permission_handler: ^11.3.1
-  connectivity_plus: ^5.0.2
+  uuid: 
+  permission_handler: 
+  connectivity_plus: 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
-  flutter_launcher_icons: ^0.13.1
+  flutter_lints: # Deixar pub resolver
+  flutter_launcher_icons: # Deixar pub resolver
 
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/images_png/1000216621.png"  # Atualizado para o arquivo PNG correto
+  image_path: "assets/images_png/1000216621.png"
   adaptive_icon_background: "#000000"
-  adaptive_icon_foreground: "assets/images_png/1000216621.png"  # Atualizado para o arquivo PNG correto
+  adaptive_icon_foreground: "assets/images_png/1000216621.png"
 
 flutter:
   uses-material-design: true
@@ -66,3 +66,4 @@ flutter:
     - family: Digital
       fonts:
         - asset: assets/fonts/digital.ttf
+

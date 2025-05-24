@@ -53,7 +53,7 @@ class LAMAFIAApp extends StatelessWidget {
               fontSize: 20,
             ),
           ),
-          cardTheme: CardTheme(
+          cardTheme: CardThemeData(
             color: ThemeConstants.surfaceColor,
             elevation: 2,
           ),

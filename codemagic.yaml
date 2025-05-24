@@ -7,13 +7,14 @@ workflows:
       flutter: stable
       xcode: latest
       cocoapods: default
+    cache:
+      cache_paths:
+        - ~/.pub-cache       # Cache de pacotes Dart/Flutter
+        - ~/.gradle/caches   # Cache global do Gradle
+        - $CM_BUILD_DIR/android/.gradle # Cache do Gradle específico do projeto
+        # Adicione outros caches se necessário, ex: $HOME/Library/Caches/CocoaPods
     scripts:
-      - name: Limpeza de cache
-        script: |
-          flutter clean
-          rm -rf ~/.gradle/caches/
-          rm -rf android/.gradle/
-          rm -rf build/
+      # Removido o script de limpeza de cache
       - name: Get dependencies
         script: |
           flutter pub get
@@ -33,20 +34,23 @@ workflows:
       flutter: stable
       xcode: latest
       cocoapods: default
+    cache:
+      cache_paths:
+        - ~/.pub-cache       # Cache de pacotes Dart/Flutter
+        - $CM_BUILD_DIR/ios/Pods # Cache do CocoaPods
+        - $HOME/Library/Caches/CocoaPods # Cache global do CocoaPods
+        # Adicione outros caches se necessário
     scripts:
-      - name: Limpeza de cache
-        script: |
-          flutter clean
-          rm -rf ~/Library/Developer/Xcode/DerivedData
-          rm -rf build/
+      # Removido o script de limpeza de cache
       - name: Get dependencies
         script: |
           flutter pub get
       - name: Build iOS
         script: |
           cd ios
-          pod install
+          pod install --repo-update # Adicionado --repo-update para garantir atualização dos repositórios
           cd ..
           flutter build ios --release --no-codesign
     artifacts:
       - build/ios/iphoneos/Runner.app
+

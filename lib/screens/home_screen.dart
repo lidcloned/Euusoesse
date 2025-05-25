@@ -1,3 +1,4 @@
+import 'login_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'login_screen.dart'; // Relative import for sibling screen

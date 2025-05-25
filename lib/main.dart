@@ -85,7 +85,7 @@ class LAMAFIAApp extends StatelessWidget {
             ),
             labelLarge: TextStyle(fontFamily: 'Gothic'), // Example for button text
           ),
-          cardTheme: CardTheme(
+          cardTheme: CardThemeData(
             color: ThemeConstants.surfaceColor,
             elevation: 2,
             margin: const EdgeInsets.all(8), // Add some margin

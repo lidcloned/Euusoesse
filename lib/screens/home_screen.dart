@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import '../utils/theme_constants.dart'; // Assuming theme_constants.dart exists
+
+import 'login_screen.dart'; // Relative import for sibling screen
+import '../utils/theme_constants.dart'; // Relative import for utils
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -17,7 +19,7 @@ class HomeScreen extends StatelessWidget {
               // TODO: Implement logout logic (clear user state, navigate to login)
               // For now, just navigate back to login as placeholder
               Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => const LoginScreen()), // Need to import LoginScreen
+                MaterialPageRoute(builder: (context) => const LoginScreen()), // LoginScreen is now correctly imported
               );
                ScaffoldMessenger.of(context).showSnackBar(
                  const SnackBar(content: Text('Logout (placeholder) executado.')),
@@ -56,7 +58,4 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-// Need to import LoginScreen if not already globally available
-// Assuming LoginScreen is in the same directory for simplicity here, adjust import as needed
-import 'login_screen.dart';
-
+// Removed the misplaced import from here

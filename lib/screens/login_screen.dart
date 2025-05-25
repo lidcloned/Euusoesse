@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/user_provider.dart';
-import '../services/auth_service.dart';
+import '../providers/user_provider.dart'; // Assuming UserProvider exists
+import 'home_screen.dart'; // Navigate to HomeScreen after login
 import '../utils/theme_constants.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -16,10 +16,36 @@ class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isLoading = false;
-  bool _obscurePassword = true;
-  String? _errorMessage;
 
-  final AuthService _authService = AuthService();
+  Future<void> _login() async {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+    setState(() {
+      _isLoading = true;
+    });
+
+    // --- Placeholder Login Logic --- 
+    // In a real app, you would call your auth service here (e.g., Firebase Auth)
+    // For now, simulate a delay and assume login is successful
+    await Future.delayed(const Duration(seconds: 2));
+    print('Simulating login for: ${_emailController.text}');
+    
+    // Update user state (placeholder)
+    // Provider.of<UserProvider>(context, listen: false).loginUser(/* User data */);
+
+    setState(() {
+      _isLoading = false;
+    });
+
+    // Navigate to HomeScreen
+    if (mounted) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const HomeScreen()), // Assuming HomeScreen exists
+      );
+    }
+    // --- End Placeholder Login Logic ---
+  }
 
   @override
   void dispose() {
@@ -28,190 +54,89 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  Future<void> _login() async {
-    if (!_formKey.currentState!.validate()) return;
-
-    setState(() {
-      _isLoading = true;
-      _errorMessage = null;
-    });
-
-    try {
-      // Fazer login
-      await _authService.signInWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
-      );
-
-      // Obter dados do usuário
-      final userProvider = Provider.of<UserProvider>(context, listen: false);
-      final userData = await _authService.getCurrentUserData();
-      
-      if (userData != null) {
-        userProvider.setUser(userData);
-      }
-
-      // Navegar para a tela principal
-      if (mounted) {
-        Navigator.pushReplacementNamed(context, '/dashboard');
-      }
-    } catch (e) {
-      setState(() {
-        _errorMessage = e.toString();
-      });
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  // Logo ou imagem
-                  Image.asset(
-                    'assets/images_png/1000146620.png',
-                    height: 120,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        height: 120,
-                        width: 120,
-                        color: ThemeConstants.primaryColor,
-                        child: Center(
-                          child: Text(
-                            'LAMAFIA',
-                            style: TextStyle(
-                              color: ThemeConstants.textColor,
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+      body: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                // Placeholder for Logo (Optional on Login screen)
+                Image.asset(
+                  'assets/images_png/lamafia_icon_foreground.png',
+                  width: 100,
+                  errorBuilder: (context, error, stackTrace) {
+                     return const Icon(Icons.hide_image, size: 80, color: ThemeConstants.textSecondaryColor);
+                  },
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  'Bem-vindo ao LAMAFIA',
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 24),
+                ),
+                const SizedBox(height: 40),
+                TextFormField(
+                  controller: _emailController,
+                  decoration: const InputDecoration(
+                    labelText: 'Email ou ID',
+                    prefixIcon: Icon(Icons.person_outline),
+                  ),
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Por favor, insira seu email ou ID';
+                    }
+                    // Basic email validation (optional)
+                    // if (!value.contains('@')) {
+                    //   return 'Email inválido';
+                    // }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _passwordController,
+                  decoration: const InputDecoration(
+                    labelText: 'Senha',
+                    prefixIcon: Icon(Icons.lock_outline),
+                  ),
+                  obscureText: true,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Por favor, insira sua senha';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 30),
+                _isLoading
+                    ? const CircularProgressIndicator()
+                    : SizedBox(
+                        width: double.infinity, // Make button full width
+                        child: ElevatedButton(
+                          onPressed: _login,
+                          child: const Text('ENTRAR'),
                         ),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 32),
-                  
-                  // Título
-                  Text(
-                    'Login',
-                    style: TextStyle(
-                      color: ThemeConstants.textColor,
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 24),
-                  
-                  // Mensagem de erro
-                  if (_errorMessage != null)
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: ThemeConstants.dangerColor.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: ThemeConstants.dangerColor),
                       ),
-                      child: Text(
-                        _errorMessage!,
-                        style: TextStyle(color: ThemeConstants.dangerColor),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  if (_errorMessage != null) const SizedBox(height: 16),
-                  
-                  // Campo de email
-                  TextFormField(
-                    controller: _emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(
-                      labelText: 'Email',
-                      prefixIcon: Icon(Icons.email),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Por favor, insira seu email';
-                      }
-                      if (!value.contains('@') || !value.contains('.')) {
-                        return 'Por favor, insira um email válido';
-                      }
-                      return null;
-                    },
+                const SizedBox(height: 20),
+                // Placeholder for 'Forgot Password' or 'Register'
+                TextButton(
+                  onPressed: () {
+                    // TODO: Implement forgot password or registration flow
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Funcionalidade ainda não implementada.')),
+                    );
+                  },
+                  child: Text(
+                    'Esqueceu a senha? / Registrar',
+                    style: TextStyle(color: ThemeConstants.accentColor),
                   ),
-                  const SizedBox(height: 16),
-                  
-                  // Campo de senha
-                  TextFormField(
-                    controller: _passwordController,
-                    obscureText: _obscurePassword,
-                    decoration: InputDecoration(
-                      labelText: 'Senha',
-                      prefixIcon: const Icon(Icons.lock),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _obscurePassword ? Icons.visibility : Icons.visibility_off,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _obscurePassword = !_obscurePassword;
-                          });
-                        },
-                      ),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Por favor, insira sua senha';
-                      }
-                      if (value.length < 6) {
-                        return 'A senha deve ter pelo menos 6 caracteres';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 24),
-                  
-                  // Botão de login
-                  ElevatedButton(
-                    onPressed: _isLoading ? null : _login,
-                    child: _isLoading
-                        ? const SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: Colors.white,
-                            ),
-                          )
-                        : const Text('ENTRAR'),
-                  ),
-                  const SizedBox(height: 16),
-                  
-                  // Link para registro
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/register');
-                    },
-                    child: Text(
-                      'Não tem uma conta? Registre-se',
-                      style: TextStyle(color: ThemeConstants.accentColor),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
@@ -219,3 +144,4 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
+
